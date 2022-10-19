@@ -4,10 +4,11 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
 import axios from "axios"
 import {  Grid, Paper } from '@mui/material';
+import { userNameContext } from './context/context';
 
 function Home() {
   return (
@@ -22,7 +23,18 @@ function Home() {
 
 
 const Header = () => {
+  const [login , setLogin] = useState();
   const navigat = useNavigate();
+  
+
+  useEffect( () => {
+    let user = localStorage.getItem('user')
+    user = JSON.parse(user)
+    if(user){
+      setLogin(user)
+    }
+  },[])
+
 
   return (
     <Box sx={{ flexGrow: 1 }} >
@@ -31,7 +43,7 @@ const Header = () => {
           <Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
             The Breaking Bad API
           </Typography>
-          <Button color="inherit" onClick={() => navigat('/Login')} >Login</Button>
+          { login ?  <Button color="inherit" >{login.username}</Button> : <Button color="inherit" onClick={() => navigat('/Login')} >Login</Button> }
         </Toolbar>
       </AppBar>
     </Box>

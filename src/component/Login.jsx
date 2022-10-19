@@ -1,33 +1,58 @@
-import { Box, Container, Grid, Paper } from '@mui/material'
-import React from 'react'
+import { Paper } from '@mui/material'
+import React, { useContext, useState } from 'react'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import { useNavigate } from 'react-router'
+import { userNameContext } from './context/context'
+
+
+
+const setLocal = (user) =>{
+  localStorage.setItem( 'user' , JSON.stringify(user))
+}
+
+
 
 function Login() {
+  const [userName , setUserName] = useState();
+  const [password , setPassword] = useState();
+  const navigate = useNavigate()
 
-  const theme1 = {
-    border:"1px solid red",
-    height :"100vh",
-    display :'flex',
-    alignItems:'center' ,
+
+  const handleSubmit = (event) => {
+      event.preventDefault();
+      const user = {
+        username : userName , 
+        password : password ,
+      }
+      setLocal(user)
+      navigate('/')
   }
-  const theme2 = {
-    border:"1px solid blue",
-    width: '30% ' ,
-    height: '500px',
-    margin:'100px auto'
-  }
 
 
-  return (
-  
-      <Grid  container spacing={2}>
-        <Grid md={8} xs={12}>
-            <Paper  sx={theme2}  elevation={8} >
-
-            </Paper> 
-        </Grid>
-      </Grid>
  
+  return (
+    <Paper elevation={20} className='login'>
+      <form  onSubmit={handleSubmit}>
+        <div>
+          <h2>Login Form</h2>
+        </div>
+       
+        <div>
+          <TextField value={userName} onChange={ e => setUserName(e.target.value)} id="userName-basic" label="userName" variant="standard" />
+        </div>
+     
+        <div>
+          <TextField value={password} onChange={ e => setPassword(e.target.value)} id="password-basic" label="password" variant="standard" />
+        </div>
+
+        <Button type='submit' variant="contained" >
+          Send
+        </Button>
+      </form>
+    </Paper>
   )
 }
+
 
 export default Login 
