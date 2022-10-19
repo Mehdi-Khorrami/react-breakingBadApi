@@ -8,7 +8,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
 import axios from "axios"
 import {  Grid, Paper } from '@mui/material';
-import { userNameContext } from './context/context';
+
+const context = React.createContext();
+
 
 function Home() {
   return (
@@ -46,9 +48,9 @@ const Header = () => {
         <Toolbar>
           <Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
             The Breaking Bad API
-          </Typography>
+          </Typography>   
           { login ?  <Button color="inherit" onClick={handleLogOut}>{login.username}</Button> : <Button color="inherit" onClick={() => navigat('/Login')} >Login</Button> }
-        </Toolbar>
+        </Toolbar>  
       </AppBar>
     </Box>
   )
@@ -56,8 +58,8 @@ const Header = () => {
 
 
 const Body = () => {
-
   const [list, setList] = useState([]);
+  const navigat = useNavigate()
 
   useEffect(() => {
     axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset=1')
@@ -68,7 +70,7 @@ const Body = () => {
   }, [])
 
   const handleClick = () => {
-      
+    navigat('/Details')
   }
 
 
