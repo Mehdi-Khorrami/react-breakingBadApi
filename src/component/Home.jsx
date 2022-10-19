@@ -67,11 +67,15 @@ const Body = () => {
       .catch(error => console.log('Error : ' + { error }))
   }, [])
 
+  const handleClick = () => {
+      
+  }
+
 
   return (
     list.map((info, index) => {
       return (
-          <Grid key={index}>
+          <Grid key={index} onClick={handleClick}>
             <Paper>
               <img src={info.img} alt={info.category} />
               <h4>{info.name}</h4>
