@@ -35,6 +35,10 @@ const Header = () => {
     }
   },[])
 
+  const handleLogOut = () => {
+    localStorage.removeItem('user')
+    setLogin('')
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }} >
@@ -43,7 +47,7 @@ const Header = () => {
           <Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
             The Breaking Bad API
           </Typography>
-          { login ?  <Button color="inherit" >{login.username}</Button> : <Button color="inherit" onClick={() => navigat('/Login')} >Login</Button> }
+          { login ?  <Button color="inherit" onClick={handleLogOut}>{login.username}</Button> : <Button color="inherit" onClick={() => navigat('/Login')} >Login</Button> }
         </Toolbar>
       </AppBar>
     </Box>
