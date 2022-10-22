@@ -7,9 +7,8 @@ import Button from '@mui/material/Button';
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
 import axios from "axios"
-import {  Grid, Paper } from '@mui/material';
-
-const context = React.createContext();
+import { Grid, Paper } from '@mui/material';
+import { selected } from '../context/context';
 
 
 function Home() {
@@ -25,17 +24,17 @@ function Home() {
 
 
 const Header = () => {
-  const [login , setLogin] = useState();
+  const [login, setLogin] = useState();
   const navigat = useNavigate();
-  
 
-  useEffect( () => {
+
+  useEffect(() => {
     let user = localStorage.getItem('user')
     user = JSON.parse(user)
-    if(user){
+    if (user) {
       setLogin(user)
     }
-  },[])
+  }, [])
 
   const handleLogOut = () => {
     localStorage.removeItem('user')
@@ -48,9 +47,9 @@ const Header = () => {
         <Toolbar>
           <Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
             The Breaking Bad API
-          </Typography>   
-          { login ?  <Button color="inherit" onClick={handleLogOut}>{login.username}</Button> : <Button color="inherit" onClick={() => navigat('/Login')} >Login</Button> }
-        </Toolbar>  
+          </Typography>
+          {login ? <Button color="inherit" onClick={handleLogOut}>{login.username}</Button> : <Button color="inherit" onClick={() => navigat('/Login')} >Login</Button>}
+        </Toolbar>
       </AppBar>
     </Box>
   )
@@ -60,16 +59,18 @@ const Header = () => {
 const Body = () => {
   const [list, setList] = useState([]);
   const navigat = useNavigate()
+  const details = useContext(selected)
 
   useEffect(() => {
-    axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset=1')
+    axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset=0')
       .then((res) => {
         setList(res.data)
       })
       .catch(error => console.log('Error : ' + { error }))
   }, [])
 
-  const handleClick = () => {
+  const handleClick = (event, key) => {
+    details.setDetails(list[key])
     navigat('/Details')
   }
 
@@ -77,12 +78,12 @@ const Body = () => {
   return (
     list.map((info, index) => {
       return (
-          <Grid key={index} onClick={handleClick}>
-            <Paper>
-              <img src={info.img} alt={info.category} />
-              <h4>{info.name}</h4>
-            </Paper>
-          </Grid>
+        <Grid key={index} onClick={event => handleClick(event, index)}>
+          <Paper>
+            <img src={info.img} alt={info.category} />
+            <h4>{info.name}</h4>
+          </Paper>
+        </Grid>
       )
     })
   )
