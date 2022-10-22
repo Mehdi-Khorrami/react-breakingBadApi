@@ -7,17 +7,21 @@ import Button from '@mui/material/Button';
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
 import axios from "axios"
-import { Grid, Paper } from '@mui/material';
-import { selected } from '../context/context';
+import { Alert, Grid, Paper } from '@mui/material';
+import { loginUser, selected } from '../context/context';
 
 
 function Home() {
+  const [loginUsers, setLoginUsers] = useState();
+
   return (
     <Box>
-      <Header />
-      <Box className='card'>
-        <Body />
-      </Box>
+      <loginUser.Provider value={{ loginUsers, setLoginUsers }}>
+        <Header />
+        <Box className='card'>
+          <Body />
+        </Box>
+      </loginUser.Provider>
     </Box>
   )
 }
@@ -26,19 +30,21 @@ function Home() {
 const Header = () => {
   const [login, setLogin] = useState();
   const navigat = useNavigate();
-
+  const { loginUsers, setLoginUsers } = useContext(loginUser)
 
   useEffect(() => {
     let user = localStorage.getItem('user')
     user = JSON.parse(user)
     if (user) {
       setLogin(user)
+      setLoginUsers(user)
     }
   }, [])
 
   const handleLogOut = () => {
     localStorage.removeItem('user')
     setLogin('')
+    setLoginUsers('')
   }
 
   return (
@@ -59,7 +65,8 @@ const Header = () => {
 const Body = () => {
   const [list, setList] = useState([]);
   const navigat = useNavigate()
-  const details = useContext(selected)
+  const details = useContext(selected);
+  const { loginUsers, setLoginUsers } = useContext(loginUser)
 
   useEffect(() => {
     axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset=0')
@@ -70,8 +77,12 @@ const Body = () => {
   }, [])
 
   const handleClick = (event, key) => {
-    details.setDetails(list[key])
-    navigat('/Details')
+    if (loginUsers) {
+      details.setDetails(list[key])
+      navigat('/Details')
+    } else {
+      alert('please login ')
+    }
   }
 
 
