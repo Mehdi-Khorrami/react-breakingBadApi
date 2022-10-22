@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
 import axios from "axios"
-import { Alert, Grid, Paper } from '@mui/material';
+import {  Grid, Paper, TextField } from '@mui/material';
 import { loginUser, selected } from '../context/context';
 
 
@@ -18,9 +18,7 @@ function Home() {
     <Box>
       <loginUser.Provider value={{ loginUsers, setLoginUsers }}>
         <Header />
-        <Box className='card'>
-          <Body />
-        </Box>
+        <Body />
       </loginUser.Provider>
     </Box>
   )
@@ -64,17 +62,27 @@ const Header = () => {
 
 const Body = () => {
   const [list, setList] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
   const navigat = useNavigate()
   const details = useContext(selected);
   const { loginUsers, setLoginUsers } = useContext(loginUser)
 
-  useEffect(() => {
-    axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset=0')
+  useEffect( () => {
+    axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset=1')
       .then((res) => {
         setList(res.data)
       })
       .catch(error => console.log('Error : ' + { error }))
   }, [])
+
+  const handleSearch = (e) =>{
+    setSearchValue(e.target.value)
+    const search = list.filter(value => value.name.toLowerCase().includes(searchValue.toLowerCase()))
+    if(search){
+      setList(search)
+    }
+    ///beporsam ino bray render shodan dobary useEffect
+  }
 
   const handleClick = (event, key) => {
     if (loginUsers) {
@@ -87,16 +95,26 @@ const Body = () => {
 
 
   return (
-    list.map((info, index) => {
-      return (
-        <Grid key={index} onClick={event => handleClick(event, index)}>
-          <Paper>
-            <img src={info.img} alt={info.category} />
-            <h4>{info.name}</h4>
-          </Paper>
-        </Grid>
-      )
-    })
+    <>
+      <TextField
+      sx={{width:"50%" , height: "16px" , position: 'absolute' , top:'25%' , left :'25%' }}
+      id="outlined-basic" label="Search" variant="outlined"
+      onChange={ handleSearch}
+      value={searchValue}
+      ></TextField>
+      <Box className='card'>
+        {list.map((info, index) => {
+          return (
+            <Grid key={index} onClick={event => handleClick(event, index)}>
+              <Paper>
+                <img src={info.img} alt={info.category} />
+                <h4>{info.name}</h4>
+              </Paper>
+            </Grid>
+          )
+        })}
+      </Box>
+    </>
   )
 }
 

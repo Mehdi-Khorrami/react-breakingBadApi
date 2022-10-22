@@ -4,8 +4,6 @@ import { selected } from '../context/context'
 
 function Details() {
   const item = useContext( selected )
-  console.log(item)
-
   return (
     <section className='details'>
       <div>
@@ -25,5 +23,4 @@ function Details() {
     </section>
   )
 }
-
 export default Details
