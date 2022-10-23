@@ -11,9 +11,10 @@ function App() {
     details,
     setDetails
   }
+
   return (
     <Router>
-      <selected.Provider  value={x}>
+      <selected.Provider value={x}>
         <Routes>
             <Route path="/" element={<Home />}/>
             <Route path="Details" element={<Details />}/>

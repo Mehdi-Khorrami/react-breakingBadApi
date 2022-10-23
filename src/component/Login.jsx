@@ -4,45 +4,52 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router'
 
-
-
-const setLocal = (user) =>{
-  localStorage.setItem( 'user' , JSON.stringify(user))
+const setLocal = (user) => {
+  localStorage.setItem('user', JSON.stringify(user))
 }
 
-
-
 function Login() {
-  const [userName , setUserName] = useState();
-  const [password , setPassword] = useState();
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+  });
+
   const navigate = useNavigate()
 
-
   const handleSubmit = (event) => {
-      event.preventDefault();
-      const user = {
-        username : userName , 
-        password : password ,
-      }
-      setLocal(user)
-      navigate('/')
+    event.preventDefault();
+    const user = {
+      username: formData.username,
+      password: formData.password,
+    }
+    setLocal(user)
+    navigate('/')
   }
 
+  const handleFormChange = (event) => {
 
- 
+    const key = event.target.id;
+
+    setFormData({
+      ...formData,
+      [key]: event.target.value
+    });
+
+  }
+
   return (
     <Paper elevation={20} className='login'>
-      <form  onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div>
           <h2>Login Form</h2>
         </div>
-       
+
         <div>
-          <TextField value={userName} onChange={ e => setUserName(e.target.value)} id="userName-basic" label="userName" variant="standard" />
+          <TextField value={formData.username} onChange={handleFormChange} id="username" label="username" variant="standard" />
         </div>
-     
+
         <div>
-          <TextField value={password} onChange={ e => setPassword(e.target.value)} id="password-basic" label="password" variant="standard" />
+          <TextField value={formData.password} onChange={handleFormChange} id="password" label="password" variant="standard" />
         </div>
 
         <Button type='submit' variant="contained" >
