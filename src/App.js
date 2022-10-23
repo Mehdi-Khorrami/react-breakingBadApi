@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { BrowserRouter as Router ,  Routes , Route } from "react-router-dom";
-import Home from "./component/Home";
-import Details from "./component/Details";
-import Login from "./component/Login";
+import Home from "./page/Home";
+import Details from "./page/Details";
+import Login from "./page/Login";
 import { selected } from "./context/context";
 
 function App() {
