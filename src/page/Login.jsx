@@ -23,7 +23,7 @@ function Login() {
       password: formData.password,
     }
     setLocal(user)
-    navigate('/')
+    navigate('/', {replace : true})
   }
 
   const handleFormChange = (event) => {

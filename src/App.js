@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { BrowserRouter as Router ,  Routes , Route } from "react-router-dom";
 import Home from "./page/Home";
 import Details from "./page/Details";
@@ -18,7 +18,7 @@ function App() {
         <Routes>
             <Route path="/" element={<Home />}/>
             <Route path="Details" element={<Details />}/>
-            <Route path="Login" element={<Login />}/>
+            <Route path="Login" element={<Login />}/> 
             <Route path="*" element={<Home />}/>  
         </Routes>
       </selected.Provider>  
