@@ -17,7 +17,7 @@ function App() {
       <selected.Provider value={x}>
         <Routes>
             <Route path="/" element={<Home />}/>
-            <Route path="Details" element={<Details />}/>
+            <Route path="Details/:id" element={<Details />}/>
             <Route path="Login" element={<Login />}/> 
             <Route path="*" element={<Home />}/>  
         </Routes>

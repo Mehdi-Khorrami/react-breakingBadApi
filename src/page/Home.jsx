@@ -12,7 +12,7 @@ function Home() {
   return (
     <Box>
       <loginUser.Provider value={{ loginUsers, setLoginUsers }}>
-        <Header />
+         <Header />
          <Body />
       </loginUser.Provider>
     </Box>

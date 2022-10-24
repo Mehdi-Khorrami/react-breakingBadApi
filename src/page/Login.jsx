@@ -49,7 +49,7 @@ function Login() {
         </div>
 
         <div>
-          <TextField value={formData.password} onChange={handleFormChange} id="password" label="password" variant="standard" />
+          <TextField type={'password'} value={formData.password} onChange={handleFormChange} id="password" label="password" variant="standard" />
         </div>
 
         <Button type='submit' variant="contained" >

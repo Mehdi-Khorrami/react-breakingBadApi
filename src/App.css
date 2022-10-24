@@ -1,16 +1,16 @@
 .card{
   width: 100%;
-  min-height: 220vh;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  align-content: space-around;
+  align-content: flex-start;
   background: #3b3b3b;
   margin-top: 250px;
 }
 .card > div {
   width: 290px;
   height: 320px;
+  margin: 20px;
   cursor: pointer;
 }
 .card > div > div {
