@@ -1,5 +1,6 @@
 .card{
   width: 100%;
+  min-height: 400px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -84,4 +85,10 @@
   width: 100%;
   display: flex;
   justify-content: center;
+}
+.pag{
+  margin: 20px;
+  width: 100%;
+  display : flex ;
+  justify-Content: center ; 
 }

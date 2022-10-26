@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useDeferredValue } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { selected } from '../context/context';
@@ -6,8 +6,10 @@ import { loginUser } from '../context/context';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Pagination from '@mui/material/Pagination';
-import { CircularProgress, Grid, Paper } from '@mui/material';
+import { Grid, Paper, CircularProgress } from '@mui/material';
+import { toast } from 'react-toastify'
 import '../App.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 function Body() {
     const [list, setList] = useState([]);
@@ -33,7 +35,7 @@ function Body() {
             details.setDetails(list[key])
             navigat('Details/' + list[key].char_id)
         } else {
-            alert('please login ')
+            toast("please Login webSit")
         }
     }
 
@@ -46,27 +48,30 @@ function Body() {
     }
 
     const handlePagination = (event, value) => {
+        setList('')
         let x = value
-        if (x == 1) {
+        if (x === 1) {
             x = 0
         }
-        if (x == 2) {
+        if (x === 2) {
             x = 12
         }
-        if (x == 3) {
+        if (x === 3) {
             x = 23
         }
-        if (x == 4) {
+        if (x === 4) {
             x = 34
         }
-        if (x == 5) {
+        if (x === 5) {
             x = 46
         }
-        if (x == 6) {
+        if (x === 6) {
             x = 58
         }
         fetchData(x)
     }
+
+
 
 
     return (
@@ -78,25 +83,28 @@ function Body() {
                 value={searchValue}
             ></TextField>
             <Box className='card'>
-                {list.filter((value) =>{
-                    if(searchValue == ''){
-                        return value
-                    } else if (value.name.toLowerCase().includes(searchValue.toLowerCase())){
-                        return value
-                    }
-                }).map((info, index) => {
-                    return (
-                        <Grid key={index} onClick={event => handleClick(event, index)}>
-                            <Paper>
-                                <img src={info.img} alt={info.category} />
-                                <h4>{info.name}</h4>
-                            </Paper>
-                        </Grid>
-                    )
-                })}
-
+                {(!list) ?
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100% !important' }}>
+                        <CircularProgress />
+                    </Box> :
+                    list.filter((value) => {
+                        if (searchValue === '') {
+                            return value
+                        } else if (value.name.toLowerCase().includes(searchValue.toLowerCase())) {
+                            return value
+                        }
+                    }).map((info, index) => {
+                        return (
+                            <Grid key={index} onClick={event => handleClick(event, index)}>
+                                <Paper>
+                                    <img src={info.img} alt={info.category} />
+                                    <h4>{info.name}</h4>
+                                </Paper>
+                            </Grid>
+                        )
+                    })}
                 <Pagination
-                    sx={{ margin: '20px' , width: '100%', display:'flex' , justifyContent:'center'}}
+                    className='pag'
                     count={6}
                     variant="outlined"
                     color="primary"
