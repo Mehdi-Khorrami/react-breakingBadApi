@@ -1,4 +1,4 @@
-import React , { useState , useContext , useEffect }from 'react'
+import React, { useState, useContext, useEffect, useDeferredValue } from 'react'
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { selected } from '../context/context';
@@ -6,7 +6,7 @@ import { loginUser } from '../context/context';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Pagination from '@mui/material/Pagination';
-import {  Grid, Paper} from '@mui/material';
+import { CircularProgress, Grid, Paper } from '@mui/material';
 import '../App.css'
 
 function Body() {
@@ -26,52 +26,48 @@ function Body() {
 
     const handleSearch = (e) => {
         setSearchValue(e.target.value)
-        const search = list.filter(value => value.name.toLowerCase().includes(searchValue.toLowerCase()))
-        if (search) {
-            setList(search)
-        }
-        ///beporsam ino bray render shodan dobary useEffect
     }
 
     const handleClick = (event, key) => {
         if (loginUsers) {
             details.setDetails(list[key])
-            navigat('Details/'+ list[key].char_id)
+            navigat('Details/' + list[key].char_id)
         } else {
             alert('please login ')
         }
     }
 
     const fetchData = (offsett) => {
-        axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset='+ offsett )
-        .then((res) => {
-            setList(res.data)
-        })
-        .catch(error => console.log('Error : ' + { error }))
+        axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset=' + offsett)
+            .then((res) => {
+                setList(res.data)
+            })
+            .catch(error => console.log('Error : ' + { error }))
     }
 
-    const handlePagination = (event , value) =>{
+    const handlePagination = (event, value) => {
         let x = value
-        if(x == 1) {
+        if (x == 1) {
             x = 0
         }
-        if(x == 2){
+        if (x == 2) {
             x = 12
         }
-        if(x == 3){
+        if (x == 3) {
             x = 23
         }
-        if(x == 4){
+        if (x == 4) {
             x = 34
         }
-        if(x == 5){
+        if (x == 5) {
             x = 46
         }
-        if(x == 6){
+        if (x == 6) {
             x = 58
         }
         fetchData(x)
     }
+
 
     return (
         <>
@@ -82,7 +78,13 @@ function Body() {
                 value={searchValue}
             ></TextField>
             <Box className='card'>
-                {list.map((info, index) => {
+                {list.filter((value) =>{
+                    if(searchValue == ''){
+                        return value
+                    } else if (value.name.toLowerCase().includes(searchValue.toLowerCase())){
+                        return value
+                    }
+                }).map((info, index) => {
                     return (
                         <Grid key={index} onClick={event => handleClick(event, index)}>
                             <Paper>
@@ -94,11 +96,11 @@ function Body() {
                 })}
 
                 <Pagination
-                sx={{margin: '20px'}}
-                count={6}  
-                variant="outlined"
-                color="primary"
-                onChange={handlePagination}
+                    sx={{ margin: '20px' , width: '100%', display:'flex' , justifyContent:'center'}}
+                    count={6}
+                    variant="outlined"
+                    color="primary"
+                    onChange={handlePagination}
                 />
             </Box>
         </>
