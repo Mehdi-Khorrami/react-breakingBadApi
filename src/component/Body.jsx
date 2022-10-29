@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect} from 'react'
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { selected } from '../context/context';
@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Pagination from '@mui/material/Pagination';
 import { Grid, Paper, CircularProgress } from '@mui/material';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
 import '../App.css'
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -17,6 +17,7 @@ function Body() {
     const navigat = useNavigate();
     const details = useContext(selected);
     const { loginUsers, setLoginUsers } = useContext(loginUser)
+   
 
     useEffect(() => {
         axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset=0')

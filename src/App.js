@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { BrowserRouter as Router ,  Routes , Route } from "react-router-dom";
+import { Routes , BrowserRouter as Router , Route } from "react-router-dom";
 import Home from "./page/Home";
 import Details from "./page/Details";
 import Login from "./page/Login";
 import { selected } from "./context/context";
+
 
 function App() {
   const [details , setDetails] = useState();

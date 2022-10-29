@@ -2,13 +2,14 @@
 import { CircularProgress,Box} from '@mui/material'
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import '../App.css'
 import { selected } from '../context/context'
 
 function Details() {
   const item = useContext(selected)
   const [lists, setLists] = useState([]);
+  const navigat = useNavigate()
   const url = useParams()
   const finalItem = item.details ? item.details : lists[0];
 
@@ -25,6 +26,11 @@ function Details() {
       <CircularProgress />
     </Box>;
   }
+
+  const handleClick = () =>{
+      
+  }
+
   return (
     <section className='details'>
       <div>
