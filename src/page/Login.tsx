@@ -3,12 +3,12 @@ import React, { useContext, useState } from 'react'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router'
+import { useAppState, useAppDispatch } from '../context'
+import { loginAction } from '../context/action'
 
-const setLocal = (user) => {
-  localStorage.setItem('user', JSON.stringify(user))
-}
 
 function Login() {
+  const dispatch = useAppDispatch()
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -18,18 +18,17 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const user = {
+    const login = {
       username: formData.username,
       password: formData.password,
     }
-    setLocal(user)
-    navigate('/', {replace : true})
+    setLocal(login)
+    loginAction(dispatch, login)
+    navigate('/', { replace: true })
   }
 
   const handleFormChange = (event) => {
-
     const key = event.target.id;
-
     setFormData({
       ...formData,
       [key]: event.target.value
@@ -58,6 +57,10 @@ function Login() {
       </form>
     </Paper>
   )
+}
+
+const setLocal = (user) => {
+  localStorage.setItem('user', JSON.stringify(user))
 }
 
 

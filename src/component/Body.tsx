@@ -1,30 +1,24 @@
-import React, { useState, useContext, useEffect} from 'react'
-import { useNavigate } from 'react-router';
-import axios from 'axios';
-import { selected } from '../context/context';
-import { loginUser } from '../context/context';
+import '../App.css'
+import 'react-toastify/dist/ReactToastify.css';
+import React, { useState , useEffect } from 'react'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Pagination from '@mui/material/Pagination';
 import { Grid, Paper, CircularProgress } from '@mui/material';
 import { toast } from 'react-toastify';
-import '../App.css'
-import 'react-toastify/dist/ReactToastify.css';
+import { useAppDispatch, useAppState } from '../context';
+import { fetchDataAction, paginationAction, statusAction } from '../context/action';
 
 function Body() {
-    const [list, setList] = useState([]);
+    const { state } = useAppState()
+    const dispatch = useAppDispatch()
     const [searchValue, setSearchValue] = useState('');
-    const navigat = useNavigate();
-    const details = useContext(selected);
-    const { loginUsers, setLoginUsers } = useContext(loginUser)
-   
 
     useEffect(() => {
-        axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset=0')
-            .then((res) => {
-                setList(res.data)
-            })
-            .catch(error => console.log('Error : ' + { error }))
+        if (!state?.characters) {
+            let y = 0
+            fetchDataAction(dispatch , y)
+        }
     }, [])
 
     const handleSearch = (e) => {
@@ -32,48 +26,28 @@ function Body() {
     }
 
     const handleClick = (event, key) => {
-        if (loginUsers) {
-            details.setDetails(list[key])
-            navigat('Details/' + list[key].char_id)
+        const user = localStorage.getItem('user')
+        if (user) {
+            const payload = state.characters[key]
+            statusAction(dispatch, payload)
         } else {
-            toast("please Login webSit")
+            toast("please Login")
         }
     }
 
-    const fetchData = (offsett) => {
-        axios.get('https://www.breakingbadapi.com/api/characters?limit=12&offset=' + offsett)
-            .then((res) => {
-                setList(res.data)
-            })
-            .catch(error => console.log('Error : ' + { error }))
-    }
 
-    const handlePagination = (event, value) => {
-        setList('')
-        let x = value
-        if (x === 1) {
-            x = 0
+     const handlePagination = (event, value) => {
+            let x = value
+            let y : number  
+            if (x === 1) {y = 0}
+            if (x === 2) {y = 12}
+            if (x === 3) {y = 23}
+            if (x === 4) {y = 34}
+            if (x === 5) {y = 46}
+            if (x === 6) {y = 58}
+         paginationAction(dispatch , x )
+         fetchDataAction(dispatch , y)             
         }
-        if (x === 2) {
-            x = 12
-        }
-        if (x === 3) {
-            x = 23
-        }
-        if (x === 4) {
-            x = 34
-        }
-        if (x === 5) {
-            x = 46
-        }
-        if (x === 6) {
-            x = 58
-        }
-        fetchData(x)
-    }
-
-
-
 
     return (
         <>
@@ -84,11 +58,13 @@ function Body() {
                 value={searchValue}
             ></TextField>
             <Box className='card'>
-                {(!list) ?
+                {(!state?.characters || state?.characters.length < 1)
+                    ?
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100% !important' }}>
                         <CircularProgress />
-                    </Box> :
-                    list.filter((value) => {
+                    </Box>
+                    :
+                    state.characters.filter((value) => {
                         if (searchValue === '') {
                             return value
                         } else if (value.name.toLowerCase().includes(searchValue.toLowerCase())) {
@@ -106,14 +82,15 @@ function Body() {
                     })}
                 <Pagination
                     className='pag'
-                    count={6}
+                    count={state.pagination.count}
                     variant="outlined"
                     color="primary"
                     onChange={handlePagination}
+                    defaultPage={state.pagination.page}
                 />
             </Box>
         </>
     )
 }
 
-export default Body
+export default Body;
